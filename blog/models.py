@@ -11,5 +11,10 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True) # Когда пост создан (нельзя изменить
     updated = models.DateTimeField(auto_now=True) # при обновлении меняется дата
 
+    # определим зараннее порядок выдачи постов
+    class Meta:
+        # указываем атрибут, и правила сортировки
+        ordering = ['-publish']
+
     def __str__(self):
         return self.title
