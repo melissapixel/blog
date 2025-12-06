@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages', # Flash-сообщения ("Пароль изменён!")
     'django.contrib.staticfiles', # Обслуживание статики (CSS, JS, картинки)
+    'blog.apps.BlogConfig', # конфигурация приложения, дабы пользовался apps.py
 ]
 
 MIDDLEWARE = [
