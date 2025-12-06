@@ -15,6 +15,10 @@ class Post(models.Model):
     class Meta:
         # указываем атрибут, и правила сортировки
         ordering = ['-publish']
+        # указываем опцию-индексс, дабы сортировка была быстрее
+        indexes = [
+            models.Index(fields=['-publish']),
+        ]
 
     def __str__(self):
         return self.title
