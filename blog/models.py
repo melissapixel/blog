@@ -2,8 +2,18 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User # чтобы работать с пользователями
 
+# создаем свой менеджер, который смотрит только опубликованные посты
+class PublishedManager(models.Manager):
+    def get_queryset(self): # ядро менеджера.
+        return super().get_queryset()\
+            .filter(status=Post.Status.PUBLISHED)
+    
 # Create your models here.
 class Post(models.Model):
+
+    # поля модели
+    objects = models.Manager() # менеджер, применяемый по умолчанию
+    published = PublishedManager() # конкретно-прикладной (наш) менеджер
 
     # даем выбор тексстовых значений
     class Status(models.TextChoices):
