@@ -9,7 +9,7 @@ def post_list(request):
     posts = Post.published.all() # используем менеджер
 
     # Постраничная разбивка с 3 постами на страницу
-    paginator = Paginator(post_list, 3)
+    paginator = Paginator(posts, 3)
     page_number = request.GET.get('page', 1) # извлекаем HTTP GET-параметр page. При отсуствии - значение 1.
     posts = paginator.page(page_number) # получаем обьект с методами
 

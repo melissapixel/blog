@@ -19,4 +19,6 @@
         <!-- linebreaks конвертирует результат в разрывы строк в формате HTML -->
         {{ post.body|truncatewords:30|linebreaks }}
     {% endfor %}
+    
+    {% include "pagination.html" with page=posts %} <!-- шаблон с навигацией -->
 {% endblock %}
