@@ -7,8 +7,9 @@
     {% for post in posts %}
         <h2>
             <!-- используем шаблонный тег -->
-            <a href="{% url 'blog:post_detail' post.id %}">
-            {{ post.title }}
+            <!-- <a href="{% url 'blog:post_detail' post.id %}"> -->
+            <a href="{{ post.get_absolute_url }}"> <!-- → вызывает reverse() → ищет маршрут по имени → подставляет параметры → возвращает путь. -->
+                {{ post.title }}
             </a>
         </h2>
         <p class="date">
