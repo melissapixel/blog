@@ -7,5 +7,8 @@ app_name = 'blog' # именное пространство приложения
 urlpatterns = [
     # представления поста
     path('', views.post_list, name='post_list'),  # → /blog/
-    path('<int:id>/', views.post_detail, name='post_detail'), # → /blog/5/
+    
+    path('<int:year>/<int:month>/<int:day>/<slug:post>/', 
+        views.post_detail, 
+        name='post_detail'), # →  /blog/2022/1/1/who-was-django-reinhardt/
 ]
