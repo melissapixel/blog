@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 
 # Create your views here.
 
@@ -11,8 +11,12 @@ def post_list(request):
     # Постраничная разбивка с 3 постами на страницу
     paginator = Paginator(posts, 3)
     page_number = request.GET.get('page', 1) # извлекаем HTTP GET-параметр page. При отсуствии - значение 1.
-    posts = paginator.page(page_number) # получаем обьект с методами
-
+    try:
+        posts = paginator.page(page_number) # получаем обьект с методами
+    except EmptyPage:
+        # Если page_number находится вне диапазона, то
+        # выдать последнюю страницу
+        posts = paginator.page(paginator.num_pages)
     return render(request,
         'blog/post/list.html', # путь к шаблону
         {'posts': posts}) # подсставляем контекст
