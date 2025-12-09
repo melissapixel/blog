@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
@@ -17,6 +17,10 @@ def post_list(request):
         # Если page_number находится вне диапазона, то
         # выдать последнюю страницу
         posts = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        # Если page_number не число, то
+        # выдать первую страницу результатов
+        posts = paginator.page(1)
     return render(request,
         'blog/post/list.html', # путь к шаблону
         {'posts': posts}) # подсставляем контекст
