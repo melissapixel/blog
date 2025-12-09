@@ -10,11 +10,14 @@ def post_list(request): # для этого представления испо�
 
 
 # создаем представление о подробности поста
-def post_detail(request, id):
+def post_detail(request, year, month, day, post):
     # используем функцию исключения
     post = get_object_or_404(Post,
-                            id=id,
-                            status=Post.Status.PUBLISHED)
+                            status=Post.Status.PUBLISHED,
+                            slug=post,
+                            publish__year=year,
+                            publish__month=month,
+                            publish__day=day)
     return render(request,
         'blog/post/detail.html',
         {'post': post})
