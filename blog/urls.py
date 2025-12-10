@@ -6,7 +6,7 @@ app_name = 'blog' # именное пространство приложения
 # когда пользователь заходит на какой-то url, то вызови его представление
 urlpatterns = [
     # представления поста
-    path('', views.post_list, name='post_list'),  # → /blog/
+    path('', views.PostListView.as_view(), name='post_list'),  # → /blog/
     
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', 
         views.post_detail, 
