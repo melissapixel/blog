@@ -11,4 +11,7 @@ urlpatterns = [
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', 
         views.post_detail, 
         name='post_detail'), # →  /blog/2022/1/1/who-was-django-reinhardt/
+
+    
+    path('post/<int:post_id>/share/', views.post_share, name='post_share'), # /post/5/share/
 ]

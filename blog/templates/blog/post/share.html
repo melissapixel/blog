@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %} <!-- наследование от шаблона blog/base.html -->
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1>Поделиться статьёй по email</h1>
+    <p>Пост: {{ post.title }}</p>
+
+    <form method="post">
+        {% csrf_token %} <!-- обязательно для POST-форм -->
+        {{ form.as_p }} <!-- автоматически превращает форму в HTML с тегами <p>. -->
+        <input type="submit" value="Отправить">
+    </form>
+{% endblock %}
