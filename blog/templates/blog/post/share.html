@@ -1,14 +1,20 @@
 {% extends "blog/base.html" %} <!-- наследование от шаблона blog/base.html -->
 
-{% block title %}{{ post.title }}{% endblock %}
+{% block title %}}Share a post{{% endblock %}
 
 {% block content %}
-    <h1>Поделиться статьёй по email</h1>
-    <p>Пост: {{ post.title }}</p>
-
-    <form method="post">
-        {% csrf_token %} <!-- обязательно для POST-форм -->
-        {{ form.as_p }} <!-- автоматически превращает форму в HTML с тегами <p>. -->
-        <input type="submit" value="Отправить">
-    </form>
+    {% if sent %}
+        <h1>E-mail successfully sent</h1>
+        <p>
+            "{{ post.title }}" was successfully sent
+            to {{ form.cleaned_data.to }}.
+        </p>
+    {% else %}
+        <h1>Share "{{ post.title }}" by e-mail</h1>
+        <form method="post">
+            {{ form.as_p }} <!-- экземпляр формы -->
+            {% csrf_token %}
+            <input type="submit" value="Send e-mail">
+        </form>
+    {% endif %}
 {% endblock %}
