@@ -3,6 +3,7 @@ from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from .forms import EmailPostForm # выгружаем нашу форму
+from django.core.mail import send_mail # функция, которая отправляет email через SMTP-сервер
 
 # Create your views here.
 
@@ -57,14 +58,35 @@ def post_share(request, post_id):
     post = get_object_or_404(Post,
                             id=post_id,
                             status=Post.Status.PUBLISHED)
+    sent = False # флаг: письмо не отправлено
+
     if request.method == 'POST':
         # Форма была передана на обработку
         form = EmailPostForm(request.POST) # создаем эксземпляр формы EmailPostForm, заполняя её данными из запроса (request.POST)
         if form.is_valid():
             # Поля формы успешно прошли валидацию
             cd = form.cleaned_data  # сохраняем сюда данные
-            # ... отправить электронное письмо
+
+            #   получаем ссылку, чтобы отправить по емейл
+            post_url = request.build_absolute_uri( # например: http://127.0.0.1:8000/blog/5/
+                post.get_absolute_url())   # например: /blog/5/.
+            
+            # example: Алиса recommends you read Как настроить Django
+            subject = f"{cd['name']} recommends you read " \
+                f"{post.title}"
+            
+            # Формирует тело письма
+            message = f"Read {post.title} at {post_url}\n\n" \
+                f"{cd['name']}\'s comments: {cd['comments']}"
+            
+            # Отправляет email через SMTP:
+            send_mail(subject, message, 'newazzzno@gmail.com',
+                [cd['to']])
+            
+            # флаг, что письмо отпралено
+            sent = True
     else:
         form = EmailPostForm()  # создаем пустую форму
     return render(request, 'blog/post/share.html', {'post': post,
-                                                    'form': form}) # либо пустая, либо с данными
+                                                    'form': form,   # либо пустая, либо с данными
+                                                    'sent': sent})  #  флаг: было ли письмо отправлено.
