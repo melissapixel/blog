@@ -57,3 +57,26 @@ class Post(models.Model):
                             self.publish.month,
                             self.publish.day,
                             self.slug])
+    
+
+# модель Comment
+class Comment(models.Model):
+    post = models.ForeignKey(Post,                      # внешний ключ на модель Post
+                            on_delete=models.CASCADE,   # удалится пост = комментарии тоже
+                            related_name='comments')    # nолучить все его комментарии
+    name = models.CharField(max_length=80)              # author name's
+    email = models.EmailField()
+    body = models.TextField()                           # text comment's
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)          # flag active (no deleted it)
+
+    # настройки
+    class Meta:
+        ordering = ['created']                          # (от старых к новым)
+        indexes = [
+            models.Index(fields=['created']),           # создаем индекс для ускорения запросов
+        ]
+
+    def __str__(self):                                  # для админки
+        return f'Comment by {self.name} on {self.post}'
