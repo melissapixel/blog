@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
-from .forms import EmailPostForm # выгружаем нашу форму
+from .forms import EmailPostForm, CommentForm # выгружаем нашу форму
 from django.core.mail import send_mail # функция, которая отправляет email через SMTP-сервер
+from django.views.decorators.http import require_POST # декоратор.
 
 # Create your views here.
 
@@ -90,3 +91,22 @@ def post_share(request, post_id):
     return render(request, 'blog/post/share.html', {'post': post,
                                                     'form': form,   # либо пустая, либо с данными
                                                     'sent': sent})  #  флаг: было ли письмо отправлено.
+
+
+@require_POST # «надеваем» декоратор на функцию
+# представление, чтобы управлять передачей поста на обработку
+def post_comment(request, post_id):
+    post = get_object_or_404(Post,
+                            id=post_id,
+                            status=Post.Status.PUBLISHED)
+    comment = None
+
+    form = CommentForm(data=request.POST)   # request.POST — содержит данные, отправленные через форму. Мы передаём их в CommentForm → форма заполняется этими данными.
+    if form.is_valid():
+        comment = form.save(commit=False) # создай объект Comment в памяти, но не записывай в БД
+        comment.post = post # Назначить пост комментарию
+        comment.save()      # Сохранить комментарий в базе данных
+    return render(request, 'blog/post/comment.html',    # мы всегда возвращаем один и тот же шаблон
+                            {'post': post,
+                            'form': form,
+                            'comment': comment})
