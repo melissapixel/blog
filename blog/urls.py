@@ -15,5 +15,5 @@ urlpatterns = [
     
     path('post/<int:post_id>/share/', 
          views.post_share, 
-         name='post_share'), # /post/5/share/
+         name='post_share'), # /blog/post/5/share/
 ]
