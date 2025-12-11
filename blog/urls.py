@@ -12,8 +12,11 @@ urlpatterns = [
         views.post_detail, 
         name='post_detail'), # →  /blog/2022/1/1/who-was-django-reinhardt/
 
-    
     path('post/<int:post_id>/share/', 
          views.post_share, 
          name='post_share'), # /blog/post/5/share/
+    
+    path('<int:post_id>/comment/', 
+         views.post_comment, 
+         name='post_comment'), # /blog/post/5/comment/
 ]
