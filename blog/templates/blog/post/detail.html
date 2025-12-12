@@ -15,4 +15,10 @@
         </a>
     </p>
 
+    {% with comments.count as total_comments %} <!-- ORM-преобразователь -->
+        <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}  <!-- чтобы отображать суффикс мн. числа для comment -->
+        </h2>
+    {% endwith %}
+
 {% endblock %}
