@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User # чтобы работать с пользователями
 from django.urls import reverse # формирует URL-адрес динамически
+from taggit.managers import TaggableManager
 
 # создаем свой менеджер, который смотрит только опубликованные посты
 class PublishedManager(models.Manager):
@@ -39,6 +40,8 @@ class Post(models.Model):
     status = models.CharField(max_length=2,
         choices=Status.choices, # ← берём варианты из Status
         default=Status.DRAFT)   # ← значение по умолчанию
+    
+    tags = TaggableManager()
     
     # определим зараннее порядок выдачи постов
     class Meta:
