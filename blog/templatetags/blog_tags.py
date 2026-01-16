@@ -3,8 +3,7 @@ from ..models import Post
 from django.db.models import Count
 # from django.utils import timezone
 # from datetime import timedelta
-from django.utils.safestring import mark_safe
-import markdown
+
 
 register = template.Library()
 
@@ -42,14 +41,3 @@ def get_most_commented_posts(count=5):
 #         return f"{hours} ч. назад"
 #     else:
 #         return datetime_obj.strftime("%d %b %Y")
-
-
-
-
-
-# ALL FILTER 
-
-# для преобразования пользовательского контента - в красивый
-@register.filter(name='markdown')   # имя фильтра в шаблоне
-def markdown_format(text):
-    return mark_safe(markdown.markdown(text))  # Markdown-текст в HTML
