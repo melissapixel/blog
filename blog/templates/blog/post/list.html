@@ -1,5 +1,5 @@
 {% extends "blog/base.html" %} <!-- наследование от шаблона blog/base.html -->
-{% load time_ago static %}
+<!-- {% load blog_tags static %} -->
 {% block title %}My Blog{% endblock %}
 
 {% block content %}
@@ -28,7 +28,7 @@
         {% endif %}
 
         <p class="date">
-            Published {% time_ago post.publish %} by {{ post.author }}
+            Published {{ post.publish|timesince }} ago by {{ post.author }}
         </p>
         <!-- применяем 2 шаблонных фильтра -->
         <!-- truncatewords усекает значение до указанного числа слов -->
