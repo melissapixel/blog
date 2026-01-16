@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles', # Обслуживание статики (CSS, JS, картинки)
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'django.contrib.postgres',
     'taggit',
     
     'blog.apps.BlogConfig', # конфигурация приложения, дабы пользовался apps.py

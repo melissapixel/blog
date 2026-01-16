@@ -16,3 +16,7 @@ class CommentForm(forms.ModelForm):                 # форма Django, при�
     class Meta:                                     # инструкция для Django, что делать
         model = Comment                             # форма работает с моделью Comment
         fields = ['name', 'email', 'body']          # Из всех полей модели покажи в форме ТОЛЬКО эти три
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField()
