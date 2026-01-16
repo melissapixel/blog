@@ -31,10 +31,9 @@ DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 
 # Application definition
-
-# склад моих приложений
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages', # Flash-сообщения ("Пароль изменён!")
     'django.contrib.staticfiles', # Обслуживание статики (CSS, JS, картинки)
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'taggit',
     
     'blog.apps.BlogConfig', # конфигурация приложения, дабы пользовался apps.py

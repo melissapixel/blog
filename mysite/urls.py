@@ -16,8 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.contrib.sitemaps.views import sitemap
+from blog.sitemaps import PostSitemap
+from django.views.decorators.cache import cache_page
+
+sitemaps = {
+    'posts': PostSitemap,
+}
+
 # Вставляем шаблоны адресов в главный шаблон
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')), # Все URL-адреса из файла blog/urls.py будут доступны под префиксом /blog/
+
+    # единая точка для всех sitemaps
+    path('sitemap.xml', cache_page(3600)(sitemap), {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap')
 ]
