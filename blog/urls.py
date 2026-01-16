@@ -1,5 +1,6 @@
 from django.urls import path # функция маршрутов
 from . import views # все предсставления
+from .feeds import LatestPostsFeed
 
 app_name = 'blog' # именное пространство приложения, дабы потом ссылаться на него
 
@@ -25,4 +26,6 @@ urlpatterns = [
     path('<int:post_id>/comment/', 
          views.post_comment, 
          name='post_comment'), # /blog/post/5/comment/
+
+     path('feed/', LatestPostsFeed(), name='post_feed'),
 ]
