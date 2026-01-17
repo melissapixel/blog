@@ -2,9 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.views.generic import ListView
-from django.contrib.postgres.search import SearchVector, \
-                                            SearchQuery, SearchRank, \
-                                            TrigramSimilarity
+from django.contrib.postgres.search import TrigramSimilarity
 from .forms import EmailPostForm, CommentForm,  SearchForm # выгружаем нашу форму
 from django.core.mail import send_mail # функция, которая отправляет email через SMTP-сервер
 from django.views.decorators.http import require_POST # декоратор.
@@ -149,7 +147,7 @@ def post_search(request):
             query = form.cleaned_data['query']
             results = Post.published.annotate(
                 similarity=TrigramSimilarity('title', query),
-            ).filter(similarity__gt=0.1).order_by('-similarity')     # Релевантная сортировка. + отсеять нерелевантные результаты
+            ).filter(similarity__gt=0.1).order_by('-similarity')
 
     # ← ВЫНОСИМ render() ЗА ПРЕДЕЛЫ УСЛОВИЯ!
     return render(request,
