@@ -146,12 +146,13 @@ def post_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            search_vector = SearchVector('title', 'body', config='english')     # Этот конфиг и так по умолчанию
+            search_vector = SearchVector('title', weight='A', config='english') + \
+                            SearchVector('body', weight='B', config='english')
             search_query = SearchQuery(query, config='english')
             results = Post.published.annotate(
                 search=search_vector,
                 rank=SearchRank(search_vector, search_query)
-            ).filter(search=search_query).order_by('-rank')     # Релевантная сортировка
+            ).filter(rank__gte=0.3).order_by('-rank')     # Релевантная сортировка. + отсеять нерелевантные результаты
 
     # ← ВЫНОСИМ render() ЗА ПРЕДЕЛЫ УСЛОВИЯ!
     return render(request,
