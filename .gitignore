@@ -27,9 +27,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+
 *.manifest
 *.spec
 
@@ -84,32 +82,12 @@ ipython_config.py
 # pyenv
 .python-version
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-Pipfile
-# Pipfile.lock  # ← раскомментируй, если НЕ используешь разные ОС (см. примечание ниже)
-
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
 # Environments
 .env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+venv_3/
 
 # Spyder project settings
 .spyderproject
@@ -131,13 +109,6 @@ dmypy.json
 
 # VS Code
 .vscode/
-
-# PyCharm
-.idea/
-
-# Sublime Text
-*.sublime-project
-*.sublime-workspace
 
 # Editors
 *~
