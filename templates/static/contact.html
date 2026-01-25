@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %} <!-- наследование от шаблона blog/base.html -->
+{% load blog_filter %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    <p>Do you want to discuss an idea, ask a question, or just say hello?</p>
+
+    <p>I am always happy to receive new messages, especially when it comes to web development, design, or interesting projects.</p>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %} <!-- наследование от шаблона blog/base.html -->
+{% load blog_filter %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    <p>Hi! I am a Mel, and this is my personal corner on the Internet — a place where I share thoughts, experiments, notes on development, technologies and everything that excites the mind.</p> 
+
+    <p>I like to understand how things work "under the hood". Here you will find articles about web development, solutions to everyday problems, best practices, and sometimes just thinking out loud.</p>
+
+    <p>This blog is not just a collection of posts, but a kind of growth journal: each entry reflects a stage of my journey. Perhaps what helped me will be useful to you.</p>
+{% endblock %}
