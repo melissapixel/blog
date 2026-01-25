@@ -1,42 +1,40 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# from django.views.generic import ListView
 from django.contrib.postgres.search import TrigramSimilarity
 from .forms import EmailPostForm, CommentForm,  SearchForm # выгружаем нашу форму
 from django.core.mail import send_mail # функция, которая отправляет email через SMTP-сервер
 from django.views.decorators.http import require_POST # декоратор.
 from taggit.models import Tag
 from django.db.models import Count
+from django.views.generic import ListView
 
-# Create your views here.
 
-def post_list(request, tag_slug=None):  # if user не перешел в tag_slug, то стоит по умолчанию
-
-    # получаем все опубликованные посты
-    post_list = Post.published.all() # используем менеджер
-
+class PostList(ListView):
+    model = Post
+    template_name = 'blog/post/list.html'
     tag = None
-    if tag_slug:    # Если тег задан — находим его в базе
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        post_list = post_list.filter(tags__in=[tag])    # Фильтруем посты по этому тег
+    queryset = Post.published.all()
+    context_object_name = 'posts'
+    ordering = ["-publish"]
+    paginate_orphans = 1
+    paginate_by = 3
+    allow_empty = False
 
-    # Постраничная разбивка с 3 постами на страницу
-    paginator = Paginator(post_list, 3)
-    page_number = request.GET.get('page', 1) # извлекаем HTTP GET-параметр page. При отсуствии - значение 1.
+    def get_queryset(self):
+        queryset = Post.published.all()                                 # Начинаем с опубликованных постов
+        tag_slug = self.kwargs.get('tag_slug')                          # Получаем tag_slug из URL (если есть)
 
-    try:
-        posts = paginator.page(page_number) # получаем обьект с методами
-    except EmptyPage:
-        # Если page_number находится вне диапазона, то выдать последнюю страницу
-        posts = paginator.page(paginator.num_pages)
-    except PageNotAnInteger:
-        # Если page_number не число, то выдать первую страницу результатов
-        posts = paginator.page(1)
-    return render(request,
-        'blog/post/list.html', # путь к шаблону
-        {'posts': posts, # подсставляем контекст
-         'tag': tag})
+        if tag_slug:
+            self.tag = get_object_or_404(Tag, slug=tag_slug)            # Находим тег или 404
+            queryset = queryset.filter(tags__in=[self.tag])             # Фильтруем посты по тегу
+        else:
+            self.tag = None
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag                                       # передаём tag в шаблон
+        return context
 
 
 # создаем представление о подробности поста
@@ -66,16 +64,6 @@ def post_detail(request, year, month, day, post):
          'comments': comments,
          'form': form,
          'similar_posts': similar_posts})
-
-
-# class PostListView(ListView):
-#     """
-#     Альтернативное представление списка постов
-#     """
-#     queryset = Post.published.all()
-#     context_object_name = 'posts'
-#     paginate_by = 3
-#     template_name = 'blog/post/list.html'
 
 
 def post_share(request, post_id):

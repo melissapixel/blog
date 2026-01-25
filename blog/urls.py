@@ -1,5 +1,6 @@
 from django.urls import path # функция маршрутов
 from . import views # все предсставления
+from .views import PostList
 from .feeds import LatestPostsFeed
 
 app_name = 'blog' # именное пространство приложения, дабы потом ссылаться на него
@@ -8,11 +9,11 @@ app_name = 'blog' # именное пространство приложения
 urlpatterns = [
     # представления поста
     path('', 
-         views.post_list, 
+         PostList.as_view(), 
          name='post_list'),  # → /blog/
 
     path('tag/<slug:tag_slug>/',
-            views.post_list, 
+            PostList.as_view(),
             name='post_list_by_tag'),
     
     path('<int:year>/<int:month>/<int:day>/<slug:post>/', 
