@@ -5,7 +5,7 @@ from django.contrib.sitemaps.views import sitemap
 from blog.sitemaps import PostSitemap
 from django.views.decorators.cache import cache_page
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 
 sitemaps = {
@@ -16,6 +16,7 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')),
+    path('', RedirectView.as_view(pattern_name='blog:post_list')),
 
 
     # Static Pages
