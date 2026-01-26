@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User # чтобы работать с пользователями
 from django.urls import reverse # формирует URL-адрес динамически
 from taggit.managers import TaggableManager
+from core.utils import generate_url_id
 
 # создаем свой менеджер, который смотрит только опубликованные посты
 class PublishedManager(models.Manager):
@@ -22,6 +23,13 @@ class Post(models.Model):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
 
+
+    url_id = models.CharField(          # Новое поле для короткого ID
+        max_length=10,
+        unique=True,
+        editable=False,                 # нельзя редактировать в админке
+        db_index=True,                   # ускоряет поиск
+    )
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250,
                             unique_for_date='publish') # поле slug уникально для поля даты
@@ -51,6 +59,13 @@ class Post(models.Model):
         indexes = [
             models.Index(fields=['-publish']),
         ]
+
+    def save(self, *args, **kwargs):
+        if not self.url_id:
+            self.url_id = generate_url_id()
+            while Post.objects.filter(url_id=self.url_id).exists():
+                self.url_id = generate_url_id()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
